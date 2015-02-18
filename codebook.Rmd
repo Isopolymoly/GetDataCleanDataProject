@@ -1,1 +1,245 @@
-#codebook.Rmd  # TODO
+## Codebook for tidy_summary.txt 
+## Coursera Data Science class: Getting and Cleaning Data
+## February 2015
+
+<!-- library(knitr)  -->
+<hr/> <hr/>
+
+
+### Codebook description format: 
+
+### column number   **column name** : class ;  text description
+ 
+
+1 **subjectID**: integer;  unique identifier assigned to study participant
+
+ <hr/>
+2 **activities**:  factor;  one of 6 defined activities the subject was performing while sensor data were recorded for each observation, according to data in the file features.txt
+ 
+
+
+activity number in original dataset | activity name in tidy dataset
+-------------- | ------------------------
+1              |     WALKING 
+2              |     WALKING_UPSTAIRS
+3              |     WALKING_DOWNSTAIRS
+4              |     SITTING
+5              |     STANDING
+6              |     LAYING
+
+
+ <hr/>
+
+The remainder of tidy_summary's columns are recorded data and derived values. 
+
+According to the dataset's README file, each observation includes:
+
+* Triaxial acceleration from the accelerometer (total acceleration) and the estimated body acceleration.
+* Triaxial Angular velocity from the gyroscope. 
+* A 561-feature vector with time and frequency domain variables. 
+* Its activity label. 
+* An identifier of the subject who carried out the experiment.
+
+
+ [direct quote from UIC HAR Dataset/README.txt]
+
+
+In this course project, my variable names for measured sensor data are based on the original 
+list of features, modified to form valid column names in R.   Each variable name for the 
+sensor data measurements is composed of identifiers for:
+
+* the **scope** for each observation; total measured (including gravity) or estimated body movement (subtracting gravitational force)
+
+* the **type** of sensor movement (such as smooth acceleration [Acc] or jerk or gyroscope)
+* the 3-dimensional (triaxial) **orientation** (X, Y, Z axes)
+* **summary statistic** type (average of reported mean and standard deviations [std] for this project)
+* a **sensor measurement** type, such as angle in radians or frequency [Freq]
+* a prefix t or f, which distinguishes between two similar measurements but I do not know what either t or f refers to. 
+
+
+
+
+3 **tBodyAcc.meanX** : double ; mean of estimated body movement acceleration in X axis
+
+
+4 **tBodyAcc.meanY** : double ; mean of estimated body movement acceleration in Y axis
+
+5 **tBodyAcc.meanZ**: double ; mean of estimated body movement acceleration in Z axis
+
+6 **tGravityAcc.meanX**: double ; mean of total acceleration in X axis (smooth)
+7 **tGravityAcc.meanY**: double ; mean of total acceleration in X axis
+8 **tGravityAcc.meanZ**: double ; mean of total acceleration in X axis
+
+
+
+9 **tBodyAccJerk.meanX**: double ; mean of estimated body acceleration (jerk) in X axis
+10 **tBodyAccJerk.meanY**: double ; mean of estimated body acceleration (jerk) in X axis
+11 **tBodyAccJerk.meanZ**: double ; mean of estimated body acceleration (jerk) in X axis
+
+
+12 **tBodyGyro.meanX**: double ; mean of estimated body movement from gyroscope sensor, smooth, in X axis
+
+13 **tBodyGyro.meanY**: double ; mean of estimated body movement from gyroscope sensor, smooth, in Y axis
+
+14 **tBodyGyro.meanZ**: double ; mean of estimated body movement from gyroscope sensor,smooth, in Z axis
+
+15 **tBodyGyroJerk.meanX**: double ; mean of estimated body movement from gyroscope sensor, jerk, in X axis
+16 **tBodyGyroJerk.meanY**: double ; mean of estimated body movement from gyroscope sensor, jerk, in X axis
+17 **tBodyGyroJerk.meanZ**: double ; mean of estimated body movement from gyroscope sensor, jerk, in X axis
+
+
+
+18 **tBodyAccMag.mean**:  double ; mean of estimated body movement acceleration's *magnitude*
+
+19 **tGravityAccMag.mean**:  double ; mean of gravitional acceleration's *magnitude*
+
+
+20 **tBodyAccJerkMag.mean**: double
+
+21 **tBodyGyroMag.mean**: double
+
+22 **tBodyGyroJerkMag.mean**: double
+
+<hr/>
+
+The following variables are similar to the previous set, with an "f" prefix: 
+
+23 **fBodyAcc.meanX**: double
+
+24 **fBodyAcc.meanY**: double
+
+25 **fBodyAcc.meanZ**: double
+
+26 **fBodyAcc.meanFreqX**: double
+
+27 **fBodyAcc.meanFreqY**: double
+
+28 **fBodyAcc.meanFreqZ**: double
+
+29 **fBodyAccJerk.meanX**: double
+
+30 **fBodyAccJerk.meanY**: double
+
+31 **fBodyAccJerk.meanZ**: double
+
+32 **fBodyAccJerk.meanFreqX**: double
+
+33 **fBodyAccJerk.meanFreqY**: double
+
+34 **fBodyAccJerk.meanFreqZ**: double
+
+35 **fBodyGyro.meanX**: double
+
+36 **fBodyGyro.meanY**: double
+
+37 **fBodyGyro.meanZ**: double
+
+
+38 **fBodyGyro.meanFreqX**: double
+
+39 **fBodyGyro.meanFreqY**: double
+
+40 **fBodyGyro.meanFreqZ**: double
+
+41 **fBodyAccMag.mean**: double
+
+42 **fBodyAccMag.meanFreq**: double
+
+43 **fBodyBodyAccJerkMag.mean**: double
+
+44 **fBodyBodyAccJerkMag.meanFreq**: double
+
+45 **fBodyBodyGyroMag.mean**: double
+
+46 **fBodyBodyGyroMag.meanFreq**: double
+
+47 **fBodyBodyGyroJerkMag.mean**: double
+
+48 **fBodyBodyGyroJerkMag.meanFreq**: double
+
+
+
+49 **angle.tBodyAccMean.gravity** : double
+
+50 **angle.tBodyAccJerkMeangravityMean.**: double
+
+51 **angle.tBodyGyroMean.gravityMean**: double
+
+52 **angle.tBodyGyroJerkMean.gravityMean**: double
+
+53 **angle.X.gravityMean**: double
+
+54 **angle.Y.gravityMean**: double
+
+55 **angle.Z.gravityMean**: double
+
+<hr/>
+The following variables are similar to the previous set, with **standard deviation** of measurements rather than the mean: 
+
+
+56 **tBodyAcc.stdX**: double
+
+57 **tBodyAcc.stdY**: double
+
+58 **tBodyAcc.stdZ**: double
+
+59 **tGravityAcc.stdX**: double
+
+60 **tGravityAcc.stdY**: double
+
+61 **tGravityAcc.stdZ**: double
+
+62 **tBodyAccJerk.stdX**: double
+
+63 **tBodyAccJerk.stdY**: double
+
+64 **tBodyAccJerk.stdZ**: double
+
+65 **tBodyGyro.stdX**: double
+
+66 **tBodyGyro.stdY**: double
+
+67 **tBodyGyro.stdZ**: double
+
+68 **tBodyGyroJerk.stdX**: double
+
+69 **tBodyGyroJerk.stdY**: double
+
+70 **tBodyGyroJerk.stdZ**: double
+
+71 **tBodyAccMag.std**: double
+
+72 **tGravityAccMag.std**: double
+
+73 **tBodyAccJerkMag.std**: double
+
+74 **tBodyGyroMag.std**: double
+
+75 **tBodyGyroJerkMag.std**: double
+
+76 **fBodyAcc.stdX**: double
+
+77 **fBodyAcc.stdY**: double
+
+78 **fBodyAcc.stdZ**: double
+
+79 **fBodyAccJerk.stdX**: double
+
+80 **fBodyAccJerk.stdY**: double
+
+81 **fBodyAccJerk.stdZ**: double
+
+82 **fBodyGyro.stdX**: double
+
+83 **fBodyGyro.stdY**: double
+
+84 **fBodyGyro.stdZ**: double
+
+85 **fBodyAccMag.std**: double
+
+86 **fBodyBodyAccJerkMag.std**: double
+
+87 **fBodyBodyGyroMag.std**: double
+
+88 **fBodyBodyGyroJerkMag.std**: double
+
