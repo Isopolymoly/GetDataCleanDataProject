@@ -164,10 +164,19 @@ sensor data measurements is composed of identifiers for:
 * the **scope** for each observation; total measured (including gravity) or estimated body movement (subtracting gravitational force)
 
 * the **type** of sensor movement (such as smooth acceleration [Acc] or jerk or gyroscope)
+    gyro:  angular velocity measured in units of radians/second
+    acceleration: meters per second^2
+    jerk: possibly meters per second^2
+
+Reference: Android sensor guide (following the logic that the Samsung products in this study would have used these sensors) http://developer.android.com/guide/topics/sensors/sensors_motion.html
+
 * the 3-dimensional (triaxial) **orientation** (X, Y, Z axes)
+
 * **summary statistic** type (average of reported mean and standard deviations [std] for this project)
-* a **sensor measurement** type, such as angle in radians or frequency [Freq]
-* a prefix t or f, which distinguishes between two similar measurements but I do not know what either t or f refers to. 
+
+* a **sensor measurement** type, such as angle in radians or frequency [Freq] in Hertz
+
+* a prefix t or f, which distinguishes between two similar measurements [I do not know what either t or f means for this dataset]. 
 
 
 
