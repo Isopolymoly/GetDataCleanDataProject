@@ -1,7 +1,7 @@
 # CodeBook.Rmd
 
 ### Coursera Data Science class: Getting and Cleaning Data
-### February 2015
+### February 2015 
 
 <!-- library(knitr)  -->
 <hr/> <hr/>
