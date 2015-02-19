@@ -61,20 +61,85 @@ img {
 
 
 
-<div id="codebook-for-tidy_summary.txt" class="section level2">
-<h2>Codebook for tidy_summary.txt</h2>
+<div id="codebook.rmd" class="section level1">
+<h1>CodeBook.Rmd</h1>
+<div id="coursera-data-science-class-getting-and-cleaning-data" class="section level3">
+<h3>Coursera Data Science class: Getting and Cleaning Data</h3>
 </div>
-<div id="coursera-data-science-class-getting-and-cleaning-data" class="section level2">
-<h2>Coursera Data Science class: Getting and Cleaning Data</h2>
-</div>
-<div id="february-2015" class="section level2">
-<h2>February 2015</h2>
+<div id="february-2015" class="section level3">
+<h3>February 2015</h3>
 <!-- library(knitr)  -->
 <hr /> <hr />
 
 
-<div id="codebook-description-format" class="section level3">
-<h3>Codebook description format:</h3>
+</div>
+<div id="section-1-project-description" class="section level2">
+<h2>Section 1: Project description</h2>
+<p>Quoted from the course project description</p>
+<pre><code>You should create one R script called run_analysis.R that does the following. 
+
+Merges the training and the test sets to create one data set.
+Extracts only the measurements on the mean and standard deviation for each measurement. 
+Uses descriptive activity names to name the activities in the data set
+Appropriately labels the data set with descriptive variable names. 
+
+From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+
+Good luck!</code></pre>
+</div>
+<div id="section-2-data-transformation" class="section level2">
+<h2>Section 2: Data transformation</h2>
+<p>This section describes the steps performed by <em>run_analysis.R</em> to gather and clean data, producing a tidy data set.</p>
+<p>Prerequisite step 0 before run_analysis.R</p>
+<ol start="0" style="list-style-type: decimal">
+<li>set up</li>
+</ol>
+<ul>
+<li><p>download and unzip raw data from <a href="https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip">https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip</a></p></li>
+<li><p>launch R or Rstudio</p></li>
+<li><p>set working directory to the parent of UCI HAR Dataset directory</p></li>
+</ul>
+<p>The following are performed within run_analysis.R:</p>
+<ol style="list-style-type: decimal">
+<li><p>call libraries</p></li>
+<li><p>read raw data for test and train sets, along with associated files with feature and activity labels</p></li>
+<li><p>store raw data with their descriptive labels for test and train, separately</p>
+<p>Note: I added descriptive column names at this step because I built a data table for train and checked the contents before proceeding with the test data set.</p></li>
+<li><p>check for any duplicate subject ID numbers in test and train sets, then if the subject ID numbers are exclusive, join test and train tables with rbind into a long, full set</p></li>
+<li><p>translate activity numbers to text terms (such as “WALKING”) in full set</p></li>
+<li><p>create valid, unique, descriptive names for table column names</p>
+<p>raw data contained illegal characters for R’s column names; removed these characters and retained descriptive terms</p></li>
+<li><p>extract measurements relating to mean and standard deviation, from the original dataset</p>
+<p>Considering the manageable sizes of these sets, I decided to combine the tables first and apply the column renaming and column extraction to the full set. For scaling this process to larger data sets, I would perform the column name fixes and column extraction twice (once on train, once on test), then combine the test and train sets.</p></li>
+<li><p>create a new tidy data set with a summary of the full data set: average of each variable for each activity, by each subject</p>
+<p>I adapted the class lectures and swirl lesson on dplyr and chaining to group the tidy data set by subject, and calculate the mean of each of the activities.</p>
+<p>tidy_summary &lt;- selected_tbl %&gt;% group_by(subjectID, activities) %&gt;% summarise_each(funs(mean))%&gt;% print</p></li>
+</ol>
+</div>
+<div id="section-3-tidy-data" class="section level2">
+<h2>Section 3: Tidy data</h2>
+<p>From the class lecture “Components of Tidy Data”</p>
+<pre><code>1. Each variable you measure should be in one column
+2. Each different observation of that variable should be in a different row
+3. There should be one table for each &quot;kind&quot; of variable
+4. If you have multiple tables, they should include a column in the table that allows them to be linked
+
+Some other important tips
+
+Include a row at the top of each file with variable names.
+Make variable names human readable AgeAtDiagnosis instead of AgeDx
+In general data should be saved in one file per table.
+
+https://github.com/jtleek/datasharing</code></pre>
+<p>In this course project, the tidy_summary table produced by run_analysis.R meets the requirements for a tidy data set: 1. each measured variable is in a separate column 2. each observation of that variable is in a different row 3. there is one table, which contains a summary of recorded sensor data</p>
+<p>The tidy_summary.txt output file contains a header row with variable names, and the output file contains one file.</p>
+<p>The variable names are compact and moderately human readable. The next section explains the variables and variable naming convention in more detail.</p>
+</div>
+<div id="section-4-variable-descriptions" class="section level2">
+<h2>Section 4: Variable descriptions</h2>
+<p>This section describes the variables created by run_analysis.R for the tidy data set.</p>
+<div id="description-format" class="section level3">
+<h3>description format:</h3>
 </div>
 <div id="column-number-column-name-class-text-description" class="section level3">
 <h3>column number <strong>column name</strong> : class ; text description</h3>
@@ -221,6 +286,20 @@ img {
 <p>86 <strong>fBodyBodyAccJerkMag.std</strong>: double</p>
 <p>87 <strong>fBodyBodyGyroMag.std</strong>: double</p>
 <p>88 <strong>fBodyBodyGyroJerkMag.std</strong>: double</p>
+<hr />
+
+</div>
+<div id="notes" class="section level3">
+<h3>Notes</h3>
+<p>Instructions from course project: “The purpose of this project is to demonstrate your ability to collect, work with, and clean a data set. The goal is to prepare tidy data that can be used for later analysis. You will be graded by your peers on a series of yes/no questions related to the project.</p>
+<p>You will be required to submit:</p>
+<ol style="list-style-type: decimal">
+<li><p>a tidy data set as described below,</p></li>
+<li><p>a link to a Github repository with your script for performing the analysis, and</p></li>
+<li><p>a code book that describes the variables, the data, and any transformations or work that you performed to clean up the data called CodeBook.md.</p></li>
+</ol>
+<p>You should also include a README.md in the repo with your scripts. This repo explains how all of the scripts work and how they are connected.&quot;</p>
+</div>
 </div>
 </div>
 
