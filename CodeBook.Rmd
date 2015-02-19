@@ -1,0 +1,375 @@
+# CodeBook.Rmd
+
+### Coursera Data Science class: Getting and Cleaning Data
+### February 2015 
+
+<!-- library(knitr)  -->
+<hr/> <hr/>
+
+
+## Section 1:  Project description
+
+Quoted from the course project description
+
+    You should create one R script called run_analysis.R that does the following. 
+
+    Merges the training and the test sets to create one data set.
+    Extracts only the measurements on the mean and standard deviation for each measurement. 
+    Uses descriptive activity names to name the activities in the data set
+    Appropriately labels the data set with descriptive variable names. 
+
+    From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+
+    Good luck!
+
+
+## Section 2:  Data transformation
+
+This section describes the steps performed by *run_analysis.R* to gather and clean data, producing a tidy data set. 
+
+Prerequisite step 0 before run_analysis.R
+
+0.  set up 
+
+* download and unzip raw data from https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip 
+        
+* launch R or Rstudio
+        
+* set working directory to the parent of UCI HAR Dataset directory
+    
+
+The following are performed within run_analysis.R:
+
+1. call libraries  
+
+
+2.  read raw data for test and train sets, along with associated files with feature and activity labels 
+
+
+3.  store raw data with their descriptive labels for test and train, separately
+
+      Note: I added descriptive column names at this step because I built a data table for train and checked the contents before proceeding with the test data set.  
+
+
+4.  check for any duplicate subject ID numbers in test and train sets, then if the subject ID numbers are exclusive,  join test and train tables with rbind into a long, full set 
+
+
+5. translate activity numbers to text terms (such as "WALKING") in full set
+
+
+6. create valid, unique, descriptive names for table column names
+
+      raw data contained illegal characters for R's column names; removed these characters and retained descriptive terms
+
+
+7.  extract measurements relating to mean and standard deviation, from the original dataset
+
+     Considering the manageable sizes of these sets, I decided to combine the tables first and apply the column renaming and column extraction to the full set.  For scaling this process to larger data sets, I would perform the column name fixes and column extraction twice (once on train, once on test), then combine the test and train sets. 
+
+
+8.  create a new tidy data set with a summary of the full data set: average of each variable for each activity, by each subject
+
+
+     I adapted the class lectures and swirl lesson on dplyr and chaining to group the tidy data set by subject, and calculate the mean of each of the activities.  
+
+    tidy_summary <- selected_tbl %>% 
+       group_by(subjectID, activities) %>%
+       summarise_each(funs(mean))%>% 
+       print
+
+
+
+
+
+## Section 3:  Tidy data
+
+From the class lecture "Components of Tidy Data"
+
+
+    1. Each variable you measure should be in one column
+    2. Each different observation of that variable should be in a different row
+    3. There should be one table for each "kind" of variable
+    4. If you have multiple tables, they should include a column in the table that allows them to be linked
+
+    Some other important tips
+
+    Include a row at the top of each file with variable names.
+    Make variable names human readable AgeAtDiagnosis instead of AgeDx
+    In general data should be saved in one file per table.
+
+    https://github.com/jtleek/datasharing
+
+
+
+In this course project, the tidy_summary table produced by run_analysis.R meets the requirements for a tidy data set:
+1.  each measured variable is in a separate column
+2.  each observation of that variable is in a different row 
+3.  there is one table, which contains a summary of recorded sensor data
+
+The tidy_summary.txt output file contains a header row with variable names, and the output file contains one file.  
+
+The variable names are compact and moderately human readable. The next section explains the variables and variable naming convention in more detail. 
+
+
+
+
+
+## Section 4:  Variable descriptions
+
+This section describes the variables created by run_analysis.R for the tidy data set. 
+
+
+###  description format: 
+
+### column number   **column name** : class ;  text description
+ 
+
+1 **subjectID**: integer;  unique identifier assigned to study participant
+
+ <hr/>
+2 **activities**:  factor;  one of 6 defined activities the subject was performing while sensor data were recorded for each observation, according to data in the file features.txt
+ 
+
+
+activity number in original dataset | activity name in tidy dataset
+-------------- | ------------------------
+1              |     WALKING 
+2              |     WALKING_UPSTAIRS
+3              |     WALKING_DOWNSTAIRS
+4              |     SITTING
+5              |     STANDING
+6              |     LAYING
+
+
+ <hr/>
+
+The remainder of tidy_summary's columns are recorded data and derived values. 
+
+According to the dataset's README file, each observation includes:
+
+* Triaxial acceleration from the accelerometer (total acceleration) and the estimated body acceleration.
+* Triaxial Angular velocity from the gyroscope. 
+* A 561-feature vector with time and frequency domain variables. 
+* Its activity label. 
+* An identifier of the subject who carried out the experiment.
+
+
+ [direct quote from UIC HAR Dataset/README.txt]
+
+
+In this course project, my variable names for measured sensor data are based on the original 
+list of features, modified to form valid column names in R.   Each variable name for the 
+sensor data measurements is composed of identifiers for:
+
+* the **scope** for each observation; total measured (including gravity) or estimated body movement (subtracting gravitational force)
+
+* the **type** of sensor movement (such as smooth acceleration [Acc] or jerk or gyroscope)
+* the 3-dimensional (triaxial) **orientation** (X, Y, Z axes)
+* **summary statistic** type (average of reported mean and standard deviations [std] for this project)
+* a **sensor measurement** type, such as angle in radians or frequency [Freq]
+* a prefix t or f, which distinguishes between two similar measurements but I do not know what either t or f refers to. 
+
+
+
+
+3 **tBodyAcc.meanX** : double ; mean of estimated body movement acceleration in X axis
+
+
+4 **tBodyAcc.meanY** : double ; mean of estimated body movement acceleration in Y axis
+
+5 **tBodyAcc.meanZ**: double ; mean of estimated body movement acceleration in Z axis
+
+6 **tGravityAcc.meanX**: double ; mean of total acceleration in X axis (smooth)
+7 **tGravityAcc.meanY**: double ; mean of total acceleration in X axis
+8 **tGravityAcc.meanZ**: double ; mean of total acceleration in X axis
+
+
+
+9 **tBodyAccJerk.meanX**: double ; mean of estimated body acceleration (jerk) in X axis
+10 **tBodyAccJerk.meanY**: double ; mean of estimated body acceleration (jerk) in X axis
+11 **tBodyAccJerk.meanZ**: double ; mean of estimated body acceleration (jerk) in X axis
+
+
+12 **tBodyGyro.meanX**: double ; mean of estimated body movement from gyroscope sensor, smooth, in X axis
+
+13 **tBodyGyro.meanY**: double ; mean of estimated body movement from gyroscope sensor, smooth, in Y axis
+
+14 **tBodyGyro.meanZ**: double ; mean of estimated body movement from gyroscope sensor,smooth, in Z axis
+
+15 **tBodyGyroJerk.meanX**: double ; mean of estimated body movement from gyroscope sensor, jerk, in X axis
+16 **tBodyGyroJerk.meanY**: double ; mean of estimated body movement from gyroscope sensor, jerk, in X axis
+17 **tBodyGyroJerk.meanZ**: double ; mean of estimated body movement from gyroscope sensor, jerk, in X axis
+
+
+
+18 **tBodyAccMag.mean**:  double ; mean of estimated body movement acceleration's *magnitude*
+
+19 **tGravityAccMag.mean**:  double ; mean of gravitional acceleration's *magnitude*
+
+
+20 **tBodyAccJerkMag.mean**: double
+
+21 **tBodyGyroMag.mean**: double
+
+22 **tBodyGyroJerkMag.mean**: double
+
+<hr/>
+
+The following variables are similar to the previous set, with an "f" prefix: 
+
+23 **fBodyAcc.meanX**: double
+
+24 **fBodyAcc.meanY**: double
+
+25 **fBodyAcc.meanZ**: double
+
+26 **fBodyAcc.meanFreqX**: double
+
+27 **fBodyAcc.meanFreqY**: double
+
+28 **fBodyAcc.meanFreqZ**: double
+
+29 **fBodyAccJerk.meanX**: double
+
+30 **fBodyAccJerk.meanY**: double
+
+31 **fBodyAccJerk.meanZ**: double
+
+32 **fBodyAccJerk.meanFreqX**: double
+
+33 **fBodyAccJerk.meanFreqY**: double
+
+34 **fBodyAccJerk.meanFreqZ**: double
+
+35 **fBodyGyro.meanX**: double
+
+36 **fBodyGyro.meanY**: double
+
+37 **fBodyGyro.meanZ**: double
+
+
+38 **fBodyGyro.meanFreqX**: double
+
+39 **fBodyGyro.meanFreqY**: double
+
+40 **fBodyGyro.meanFreqZ**: double
+
+41 **fBodyAccMag.mean**: double
+
+42 **fBodyAccMag.meanFreq**: double
+
+43 **fBodyBodyAccJerkMag.mean**: double
+
+44 **fBodyBodyAccJerkMag.meanFreq**: double
+
+45 **fBodyBodyGyroMag.mean**: double
+
+46 **fBodyBodyGyroMag.meanFreq**: double
+
+47 **fBodyBodyGyroJerkMag.mean**: double
+
+48 **fBodyBodyGyroJerkMag.meanFreq**: double
+
+
+
+49 **angle.tBodyAccMean.gravity** : double
+
+50 **angle.tBodyAccJerkMeangravityMean.**: double
+
+51 **angle.tBodyGyroMean.gravityMean**: double
+
+52 **angle.tBodyGyroJerkMean.gravityMean**: double
+
+53 **angle.X.gravityMean**: double
+
+54 **angle.Y.gravityMean**: double
+
+55 **angle.Z.gravityMean**: double
+
+<hr/>
+The following variables are similar to the previous set, with **standard deviation** of measurements rather than the mean: 
+
+
+56 **tBodyAcc.stdX**: double
+
+57 **tBodyAcc.stdY**: double
+
+58 **tBodyAcc.stdZ**: double
+
+59 **tGravityAcc.stdX**: double
+
+60 **tGravityAcc.stdY**: double
+
+61 **tGravityAcc.stdZ**: double
+
+62 **tBodyAccJerk.stdX**: double
+
+63 **tBodyAccJerk.stdY**: double
+
+64 **tBodyAccJerk.stdZ**: double
+
+65 **tBodyGyro.stdX**: double
+
+66 **tBodyGyro.stdY**: double
+
+67 **tBodyGyro.stdZ**: double
+
+68 **tBodyGyroJerk.stdX**: double
+
+69 **tBodyGyroJerk.stdY**: double
+
+70 **tBodyGyroJerk.stdZ**: double
+
+71 **tBodyAccMag.std**: double
+
+72 **tGravityAccMag.std**: double
+
+73 **tBodyAccJerkMag.std**: double
+
+74 **tBodyGyroMag.std**: double
+
+75 **tBodyGyroJerkMag.std**: double
+
+76 **fBodyAcc.stdX**: double
+
+77 **fBodyAcc.stdY**: double
+
+78 **fBodyAcc.stdZ**: double
+
+79 **fBodyAccJerk.stdX**: double
+
+80 **fBodyAccJerk.stdY**: double
+
+81 **fBodyAccJerk.stdZ**: double
+
+82 **fBodyGyro.stdX**: double
+
+83 **fBodyGyro.stdY**: double
+
+84 **fBodyGyro.stdZ**: double
+
+85 **fBodyAccMag.std**: double
+
+86 **fBodyBodyAccJerkMag.std**: double
+
+87 **fBodyBodyGyroMag.std**: double
+
+88 **fBodyBodyGyroJerkMag.std**: double
+
+
+<hr/>
+
+### Notes
+
+Instructions from course project:
+"The purpose of this project is to demonstrate your ability to collect, work with, and clean a data set. The goal is to prepare tidy data that can be used for later analysis. You will be graded by your peers on a series of yes/no questions related to the project. 
+
+You will be required to submit:
+
+  1) a tidy data set as described below, 
+  
+  2) a link to a Github repository with your script for performing the analysis, and 
+  
+  3) a code book that describes the variables, the data, and any transformations or work that you performed to clean up the data called CodeBook.md. 
+ 
+ You should also include a README.md in the repo with your scripts. This repo explains how all of the scripts work and how they are connected."    
